@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>זוויות בין מקבילים - תרגול אינטראקטיבי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a2841;
+    --ink-soft: #2d3e5f;
+    --ink-light: #5a6b85;
+    --paper: #f8f5ed;
+    --paper-warm: #f3eedd;
+    --grid: #c9d4e3;
+    --accent: #c8553d;
+    --teal: #178e8a;
+    --gold: #d4a04c;
+    --green: #4a8a3d;
+    --purple: #7d4e9e;
+    --shadow: 0 2px 0 rgba(26, 40, 65, 0.08), 0 8px 24px rgba(26, 40, 65, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow-x: hidden; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at top right, rgba(212, 160, 76, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(23, 142, 138, 0.06), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 32px 20px;
+  }
+
+  .eyebrow {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  h1 .highlight {
+    background: linear-gradient(180deg, transparent 60%, var(--gold) 60%, var(--gold) 90%, transparent 90%);
+    padding: 0 4px;
+  }
+
+  .subtitle {
+    color: var(--ink-light);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--ink);
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    background: transparent;
+    border: 2px solid var(--ink);
+    border-bottom: none;
+    padding: 14px 28px;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--ink);
+    margin-bottom: -2px;
+    margin-left: -2px;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { background: var(--paper-warm); }
+
+  .tab.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .tab .num {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: var(--accent);
+    margin-left: 8px;
+  }
+
+  .tab.active .num { color: var(--gold); }
+
+  .section { display: none; animation: fadeIn 0.4s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    bottom: -6px;
+    left: -6px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    z-index: -1;
+    background: var(--paper-warm);
+  }
+
+  .card h2 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 12px;
+  }
+
+  .card h3 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.3rem;
+    margin: 20px 0 12px;
+    color: var(--accent);
+  }
+
+  .card p { margin-bottom: 12px; color: var(--ink-soft); }
+
+  .definition {
+    background: var(--paper-warm);
+    border-right: 5px solid var(--accent);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+
+  .definition strong { color: var(--accent); }
+
+  .diagram-wrap {
+    background: var(--paper);
+    border: 2px dashed var(--ink-light);
+    border-radius: 4px;
+    padding: 16px;
+    margin: 20px 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  .diagram-wrap svg {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+  }
+
+  .diagram-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--ink-light);
+    margin-top: 8px;
+  }
+
+  .key-fact {
+    background: linear-gradient(135deg, var(--teal) 0%, #14706d 100%);
+    color: var(--paper);
+    padding: 24px 28px;
+    border-radius: 4px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .key-fact::before {
+    content: '✦';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 6rem;
+    opacity: 0.1;
+  }
+
+  .key-fact h4 {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .example {
+    border-right: 4px solid var(--teal);
+    padding: 20px 24px;
+    margin: 20px 0;
+    background: rgba(168, 216, 214, 0.15);
+    border-radius: 4px;
+  }
+
+  .example-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .step {
+    margin: 10px 0;
+    padding-right: 16px;
+    position: relative;
+  }
+
+  .step::before {
+    content: '◆';
+    position: absolute;
+    right: 0;
+    color: var(--accent);
+  }
+
+  .formula {
+    font-family: 'Frank Ruhl Libre', serif;
+    background: var(--paper-warm);
+    padding: 8px 16px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 4px 0;
+    direction: ltr;
+    font-size: 1.1rem;
+    border: 1px solid var(--ink-light);
+  }
+
+  /* Difficulty badge */
+  .difficulty {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .difficulty.easy { background: rgba(74, 138, 61, 0.2); color: var(--green); }
+  .difficulty.medium { background: rgba(212, 160, 76, 0.25); color: #a47830; }
+  .difficulty.hard { background: rgba(200, 85, 61, 0.2); color: var(--accent); }
+
+  /* Topic tag */
+  .topic-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--paper-warm);
+    border: 1px solid var(--ink-light);
+    border-radius: 100px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-right: 6px;
+  }
+
+  /* Quiz */
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .progress {
+    flex: 1;
+    min-width: 180px;
+    background: var(--paper-warm);
+    border: 2px solid var(--ink);
+    border-radius: 100px;
+    height: 12px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--accent));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .score-badge {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-family: 'Frank Ruhl Libre', serif;
+  }
+
+  .question {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .question .qnum {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin-left: 10px;
+  }
+
+  .answer-row {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .answer-row label {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  input[type="number"] {
+    font-family: 'Heebo', sans-serif;
+    font-size: 1.2rem;
+    padding: 10px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    background: var(--paper);
+    width: 110px;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200, 85, 61, 0.2);
+  }
+
+  /* Multiple inputs (for x and y questions) */
+  .multi-input { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin: 20px 0; }
+  .multi-input .input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--paper-warm);
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--ink-light);
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .choice {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 14px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1.05rem;
+    text-align: right;
+  }
+
+  .choice:hover {
+    background: var(--paper-warm);
+    transform: translateX(-4px);
+  }
+
+  .choice.selected {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .choice.correct {
+    background: var(--green);
+    color: var(--paper);
+    border-color: var(--green);
+  }
+
+  .choice.wrong {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+  }
+
+  .btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 12px 28px;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 4px 4px 0 var(--ink-soft);
+  }
+
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink-soft);
+  }
+
+  .btn:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--ink-soft);
+  }
+
+  .btn-accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 #8a3a28;
+  }
+
+  .btn-accent:hover { box-shadow: 6px 6px 0 #8a3a28; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    box-shadow: none;
+  }
+
+  .btn-ghost:hover {
+    background: var(--paper-warm);
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .feedback {
+    margin: 20px 0;
+    padding: 20px 24px;
+    border-radius: 4px;
+    display: none;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback.show { display: block; }
+
+  .feedback.correct {
+    background: rgba(74, 138, 61, 0.15);
+    border-right: 4px solid var(--green);
+  }
+
+  .feedback.wrong {
+    background: rgba(200, 85, 61, 0.12);
+    border-right: 4px solid var(--accent);
+  }
+
+  .feedback.hint {
+    background: rgba(212, 160, 76, 0.18);
+    border-right: 4px solid var(--gold);
+  }
+
+  .feedback-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .feedback.correct .feedback-title { color: var(--green); }
+  .feedback.wrong .feedback-title { color: var(--accent); }
+  .feedback.hint .feedback-title { color: var(--ink); }
+
+  .feedback-explain {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    margin-top: 8px;
+    line-height: 1.7;
+  }
+
+  .result-screen {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .result-emoji {
+    font-size: 5rem;
+    margin-bottom: 16px;
+  }
+
+  .result-score {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* Filter buttons */
+  .topic-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 2px solid var(--ink-light);
+    color: var(--ink-soft);
+    padding: 6px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.92rem;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  @media (max-width: 640px) {
+    .container { padding: 20px 14px 60px; }
+    .card { padding: 20px; }
+    .tab { padding: 10px 16px; font-size: 1rem; }
+    h1 { font-size: 2rem; }
+    #dual-diagram-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="eyebrow">~ גאומטריה ~</div>
+    <h1>זוויות בין <span class="highlight">מקבילים</span></h1>
+    <p class="subtitle">זוויות מתחלפות, מתאימות וחד-צדדיות - הסבר, דוגמאות ותרגול מלא</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="learn"><span class="num">①</span>הסבר</button>
+    <button class="tab" data-tab="examples"><span class="num">②</span>דוגמאות</button>
+    <button class="tab" data-tab="practice"><span class="num">③</span>תרגול</button>
+  </nav>
+
+  <!-- ============ LEARN ============ -->
+  <section class="section active" id="learn">
+
+    <div class="card">
+      <h2>מבוא: הזוויות שנוצרות</h2>
+      <p>כאשר ישר אחד (<strong>חותך</strong>) חוצה שני ישרים אחרים, נוצרות <strong>8 זוויות</strong>. אלו שמותיהן:</p>
+      
+      <div class="diagram-wrap" id="diagram-all-angles"></div>
+      
+      <div class="key-fact" style="background: linear-gradient(135deg, var(--ink) 0%, #2d3e5f 100%);">
+        <h4>✦ עיקרון מרכזי ✦</h4>
+        <p>כשהישרים <strong>מקבילים</strong>, יש בכל המבנה רק <strong>שני ערכים</strong> אפשריים - ערך אחד וההשלמה שלו ל-180°.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>1. זוויות מתחלפות</h2>
+      <p>שתי זוויות בצדדים <strong>מנוגדים</strong> של החותך. יוצרות צורת <strong>Z</strong>.</p>
+      <p style="margin-right:16px;"><strong>פנימיות:</strong> בין הישרים | <strong>חיצוניות:</strong> מחוץ לישרים.</p>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;" id="dual-diagram-grid">
+        <div class="diagram-wrap" id="diagram-internal">
+          <div style="font-family:'Frank Ruhl Libre',serif; font-weight:700; color:var(--teal);">פנימיות</div>
+        </div>
+        <div class="diagram-wrap" id="diagram-external">
+          <div style="font-family:'Frank Ruhl Libre',serif; font-weight:700; color:var(--accent);">חיצוניות</div>
+        </div>
+      </div>
+      
+      <div class="definition"><strong>בין מקבילים → שוות זו לזו</strong></div>
+    </div>
+
+    <div class="card">
+      <h2>2. זוויות מתאימות</h2>
+      <p>שתי זוויות באותו <strong>צד</strong> של החותך, באותו <strong>מיקום</strong> ביחס לישר שלהן (אחת מעל ישר ואחת מעל הישר השני, או שתיהן מתחת). יוצרות צורת <strong>F</strong>.</p>
+
+      <div class="diagram-wrap" id="diagram-corresponding"></div>
+
+      <div class="definition"><strong>בין מקבילים → שוות זו לזו</strong></div>
+    </div>
+
+    <div class="card">
+      <h2>3. זוויות חד-צדדיות</h2>
+      <p>שתי זוויות באותו <strong>צד</strong> של החותך, ושתיהן <strong>בין</strong> הישרים (פנימיות באותו צד). יוצרות צורת <strong>U</strong>.</p>
+
+      <div class="diagram-wrap" id="diagram-cointerior"></div>
+
+      <div class="definition"><strong>בין מקבילים → סכומן 180°</strong> (משלימות זו לזו)</div>
+    </div>
+
+    <div class="card">
+      <h2>סיכום הזוויות</h2>
+      <p>טבלה מסכמת של כל הקשרים בין זוויות בין מקבילים:</p>
+
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse: collapse; margin: 16px 0;">
+          <thead>
+            <tr style="background: var(--ink); color: var(--paper);">
+              <th style="padding:12px; text-align:right; font-family:'Frank Ruhl Libre',serif;">סוג</th>
+              <th style="padding:12px; text-align:right; font-family:'Frank Ruhl Libre',serif;">זיהוי</th>
+              <th style="padding:12px; text-align:right; font-family:'Frank Ruhl Libre',serif;">צורה</th>
+              <th style="padding:12px; text-align:right; font-family:'Frank Ruhl Libre',serif;">היחס</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: var(--paper-warm);">
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); font-weight:700;">מתחלפות</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light);">צדדים מנוגדים של החותך</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); font-family:serif; font-size:1.3rem;">Z</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); color: var(--green); font-weight:700;">שוות</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); font-weight:700;">מתאימות</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light);">אותו צד, אותו מיקום</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); font-family:serif; font-size:1.3rem;">F</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); color: var(--green); font-weight:700;">שוות</td>
+            </tr>
+            <tr style="background: var(--paper-warm);">
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); font-weight:700;">חד-צדדיות</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light);">אותו צד, בין הישרים</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); font-family:serif; font-size:1.3rem;">U</td>
+              <td style="padding:12px; border-bottom:1px solid var(--ink-light); color: var(--accent); font-weight:700;">סכום 180°</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; font-weight:700;">קודקודיות</td>
+              <td style="padding:12px;">אחת מול השנייה בקודקוד</td>
+              <td style="padding:12px;">×</td>
+              <td style="padding:12px; color: var(--green); font-weight:700;">תמיד שוות</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXAMPLES ============ -->
+  <section class="section" id="examples">
+    <div id="examples-content"></div>
+  </section>
+
+  <!-- ============ PRACTICE ============ -->
+  <section class="section" id="practice">
+    <div class="card" style="margin-bottom: 16px;">
+      <h2 style="margin-bottom: 12px; padding-bottom: 8px;">בחירת נושא</h2>
+      <div class="topic-filters" id="topicFilters">
+        <button class="filter-btn active" data-topic="all">הכל</button>
+        <button class="filter-btn" data-topic="basic">בסיסי</button>
+        <button class="filter-btn" data-topic="alternate">מתחלפות</button>
+        <button class="filter-btn" data-topic="corresponding">מתאימות</button>
+        <button class="filter-btn" data-topic="cointerior">חד-צדדיות</button>
+        <button class="filter-btn" data-topic="advanced">מתקדם</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="quiz-header">
+        <div style="flex:0 0 auto;">
+          <div style="font-family:'Caveat',cursive; font-size:1.3rem; color:var(--accent);">שאלה</div>
+          <div id="qIndicator" style="font-family:'Frank Ruhl Libre',serif; font-size:1.5rem; font-weight:700;">טוען...</div>
+        </div>
+        <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="score-badge" id="scoreBadge">ניקוד: 0</div>
+      </div>
+      <div id="quizContent"></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ============ TAB SWITCHING ============
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // ============ DIAGRAM BUILDERS ============
+  
+  // Build standard parallel-lines + transversal diagram with arc-marked angles
+  function buildDiagram(config) {
+    const W = 500, H = 280;
+    const yA = 80, yB = 200;
+    
+    let tx1, ty1, tx2, ty2;
+    if (config.direction === 'rl') {
+      tx1 = 340; ty1 = 20; tx2 = 160; ty2 = 260;
+    } else {
+      tx1 = 160; ty1 = 20; tx2 = 340; ty2 = 260;
+    }
+    
+    const t = (y) => (y - ty1) / (ty2 - ty1);
+    const xAt = (y) => tx1 + (tx2 - tx1) * t(y);
+    const xAi = xAt(yA);
+    const xBi = xAt(yB);
+    
+    const dx = tx2 - tx1, dy = ty2 - ty1;
+    const dLen = Math.sqrt(dx*dx + dy*dy);
+    const ux = dx / dLen, uy = dy / dLen;
+    
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="500" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">`;
+    
+    // Z-highlight if requested
+    if (config.zHighlight) {
+      const z = config.zHighlight;
+      const pts = z.map(a => ({ x: a.line === 'a' ? xAi : xBi, y: a.line === 'a' ? yA : yB }));
+      const horizSign1 = z[0].sector.endsWith('L') ? -1 : 1;
+      const horizSign2 = z[1].sector.endsWith('L') ? -1 : 1;
+      const startX = pts[0].x + horizSign1 * 80;
+      const endX = pts[1].x + horizSign2 * 80;
+      svg += `<path d="M ${startX} ${pts[0].y} L ${pts[0].x} ${pts[0].y} L ${pts[1].x} ${pts[1].y} L ${endX} ${pts[1].y}" stroke="#d4a04c" stroke-width="7" fill="none" opacity="0.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+    
+    svg += `<line x1="20" y1="${yA}" x2="${W-20}" y2="${yA}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<line x1="20" y1="${yB}" x2="${W-20}" y2="${yB}" stroke="#1a2841" stroke-width="2.5"/>`;
+    
+    if (config.showParallel !== false) {
+      svg += `<polygon points="${W-60},${yA-6} ${W-48},${yA} ${W-60},${yA+6}" fill="#1a2841"/>`;
+      svg += `<polygon points="${W-60},${yB-6} ${W-48},${yB} ${W-60},${yB+6}" fill="#1a2841"/>`;
+    }
+    
+    svg += `<line x1="${tx1}" y1="${ty1}" x2="${tx2}" y2="${ty2}" stroke="#c8553d" stroke-width="2.5"/>`;
+    svg += `<text x="6" y="${yA+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">a</text>`;
+    svg += `<text x="6" y="${yB+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">b</text>`;
+    
+    if (config.angles) {
+      config.angles.forEach(a => {
+        const cx = a.line === 'a' ? xAi : xBi;
+        const cy = a.line === 'a' ? yA : yB;
+        const hSign = a.sector.endsWith('L') ? -1 : 1;
+        const vSign = a.sector.startsWith('A') ? -1 : 1;
+        
+        const tDirX = vSign === -1 ? -ux : ux;
+        const tDirY = vSign === -1 ? -uy : uy;
+        
+        const r = 28;
+        const x1 = cx + r * hSign;
+        const y1 = cy;
+        const x2 = cx + r * tDirX;
+        const y2 = cy + r * tDirY;
+        
+        const cross = hSign * tDirY;
+        const sweep = cross > 0 ? 1 : 0;
+        
+        const arcColor = a.color === 'red' ? '#c8553d' : '#178e8a';
+        const arcFill = a.color === 'red' ? 'rgba(200,85,61,0.12)' : 'rgba(168,216,214,0.25)';
+        
+        svg += `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="${arcFill}" stroke="${arcColor}" stroke-width="2"/>`;
+        
+        const midX = (hSign + tDirX) / 2;
+        const midY = (0 + tDirY) / 2;
+        const midLen = Math.sqrt(midX*midX + midY*midY);
+        const labelR = r + 18;
+        const lx = cx + (midX / midLen) * labelR;
+        const ly = cy + (midY / midLen) * labelR + 6;
+        
+        svg += `<text x="${lx}" y="${ly}" font-family="Frank Ruhl Libre, serif" font-size="18" font-weight="700" fill="${arcColor}" text-anchor="middle">${a.label}</text>`;
+      });
+    }
+    
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // Numbered 8-angles diagram for the introduction
+  function buildNumberedDiagram() {
+    const W = 540, H = 300;
+    const yA = 90, yB = 220;
+    const tx1 = 360, ty1 = 30;
+    const tx2 = 180, ty2 = 280;
+    
+    const t = (y) => (y - ty1) / (ty2 - ty1);
+    const xAt = (y) => tx1 + (tx2 - tx1) * t(y);
+    const xAi = xAt(yA);
+    const xBi = xAt(yB);
+    
+    const dx = tx2 - tx1, dy = ty2 - ty1;
+    const dLen = Math.sqrt(dx*dx + dy*dy);
+    const ux = dx / dLen, uy = dy / dLen;
+    
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="540" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">`;
+    
+    function drawArc(cx, cy, hSign, vSign, color, arcRadius) {
+      const tDirX = vSign === -1 ? -ux : ux;
+      const tDirY = vSign === -1 ? -uy : uy;
+      const x1 = cx + arcRadius * hSign;
+      const y1 = cy;
+      const x2 = cx + arcRadius * tDirX;
+      const y2 = cy + arcRadius * tDirY;
+      const cross = hSign * tDirY;
+      const sweep = cross > 0 ? 1 : 0;
+      const fillOpacity = color === '#178e8a' ? '0.25' : '0.15';
+      return `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${arcRadius} ${arcRadius} 0 0 ${sweep} ${x2} ${y2} Z" fill="${color}" fill-opacity="${fillOpacity}" stroke="${color}" stroke-width="1.5"/>`;
+    }
+    
+    const arcR = 18;
+    [[+1,-1,'#178e8a'], [-1,-1,'#c8553d'], [-1,+1,'#178e8a'], [+1,+1,'#c8553d']].forEach(([h,v,c]) => {
+      svg += drawArc(xAi, yA, h, v, c, arcR);
+      svg += drawArc(xBi, yB, h, v, c, arcR);
+    });
+    
+    svg += `<line x1="20" y1="${yA}" x2="${W-20}" y2="${yA}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<line x1="20" y1="${yB}" x2="${W-20}" y2="${yB}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<polygon points="${W-60},${yA-6} ${W-48},${yA} ${W-60},${yA+6}" fill="#1a2841"/>`;
+    svg += `<polygon points="${W-60},${yB-6} ${W-48},${yB} ${W-60},${yB+6}" fill="#1a2841"/>`;
+    svg += `<line x1="${tx1}" y1="${ty1}" x2="${tx2}" y2="${ty2}" stroke="#c8553d" stroke-width="2.5"/>`;
+    svg += `<text x="6" y="${yA+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">a</text>`;
+    svg += `<text x="6" y="${yB+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">b</text>`;
+    
+    function placeNumber(cx, cy, hSign, vSign, num, color) {
+      const tDirX = vSign === -1 ? -ux : ux;
+      const tDirY = vSign === -1 ? -uy : uy;
+      const rawBx = hSign + tDirX;
+      const rawBy = tDirY;
+      const bLen = Math.sqrt(rawBx*rawBx + rawBy*rawBy);
+      const bx = rawBx / bLen;
+      const by = rawBy / bLen;
+      const isAcute = bLen > 1.0;
+      const R = isAcute ? 48 : 36;
+      const x = cx + bx * R;
+      const y = cy + by * R;
+      return `<g><circle cx="${x}" cy="${y}" r="13" fill="white" stroke="${color}" stroke-width="2"/><text x="${x}" y="${y+5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="${color}" text-anchor="middle">${num}</text></g>`;
+    }
+    
+    svg += placeNumber(xAi, yA, +1, -1, '1', '#178e8a');
+    svg += placeNumber(xAi, yA, -1, -1, '2', '#c8553d');
+    svg += placeNumber(xAi, yA, -1, +1, '3', '#178e8a');
+    svg += placeNumber(xAi, yA, +1, +1, '4', '#c8553d');
+    svg += placeNumber(xBi, yB, +1, -1, '5', '#178e8a');
+    svg += placeNumber(xBi, yB, -1, -1, '6', '#c8553d');
+    svg += placeNumber(xBi, yB, -1, +1, '7', '#178e8a');
+    svg += placeNumber(xBi, yB, +1, +1, '8', '#c8553d');
+    
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // Triangle diagram - parallel line a above, triangle below with vertices on/below b
+  function buildTriangleDiagram(config) {
+    const W = 540, H = 320;
+    const yA = 60, yB = 240;  // Wider gap between lines for better triangle
+    
+    // Triangle vertices - wider angles at A
+    const Ax = 250, Ay = yA;
+    const Bx = 80, By = yB;
+    const Cx = 400, Cy = yB;
+    
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="540" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">`;
+    
+    svg += `<line x1="20" y1="${yA}" x2="${W-20}" y2="${yA}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<line x1="20" y1="${yB}" x2="${W-20}" y2="${yB}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<polygon points="${W-60},${yA-6} ${W-48},${yA} ${W-60},${yA+6}" fill="#1a2841"/>`;
+    svg += `<polygon points="${W-60},${yB-6} ${W-48},${yB} ${W-60},${yB+6}" fill="#1a2841"/>`;
+    svg += `<text x="6" y="${yA+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">a</text>`;
+    svg += `<text x="6" y="${yB+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">b</text>`;
+    
+    // Triangle sides
+    svg += `<line x1="${Ax}" y1="${Ay}" x2="${Bx}" y2="${By}" stroke="#c8553d" stroke-width="2.5"/>`;
+    svg += `<line x1="${Ax}" y1="${Ay}" x2="${Cx}" y2="${Cy}" stroke="#c8553d" stroke-width="2.5"/>`;
+    
+    // Vertex labels
+    svg += `<text x="${Ax}" y="${Ay - 12}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841" text-anchor="middle">A</text>`;
+    svg += `<text x="${Bx - 14}" y="${By + 22}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">B</text>`;
+    svg += `<text x="${Cx + 8}" y="${Cy + 22}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">C</text>`;
+    
+    const ABdx = Bx - Ax, ABdy = By - Ay;
+    const ABlen = Math.sqrt(ABdx*ABdx + ABdy*ABdy);
+    const uABx = ABdx / ABlen, uABy = ABdy / ABlen;
+    
+    const ACdx = Cx - Ax, ACdy = Cy - Ay;
+    const AClen = Math.sqrt(ACdx*ACdx + ACdy*ACdy);
+    const uACx = ACdx / AClen, uACy = ACdy / AClen;
+    
+    if (config.A1) {
+      // Angle 1: between line a (going left) and AB (going down-left)
+      const r = 26;
+      const x1 = Ax + r * (-1);
+      const y1 = Ay;
+      const x2 = Ax + r * uABx;
+      const y2 = Ay + r * uABy;
+      const cross = (-1) * uABy;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Ax} ${Ay} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(168,216,214,0.3)" stroke="#178e8a" stroke-width="2"/>`;
+      // Place label further away in the bisector direction
+      const midX = (-1 + uABx) / 2, midY = uABy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 18;
+      svg += `<text x="${Ax + midX/midLen * labelR}" y="${Ay + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#178e8a" text-anchor="middle">${config.A1}</text>`;
+    }
+    
+    if (config.A2) {
+      // Angle 2: inside triangle between AB and AC - this is the apex angle
+      const r = 22;
+      const x1 = Ax + r * uABx;
+      const y1 = Ay + r * uABy;
+      const x2 = Ax + r * uACx;
+      const y2 = Ay + r * uACy;
+      const cross = uABx * uACy - uABy * uACx;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Ax} ${Ay} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(168,216,214,0.3)" stroke="#178e8a" stroke-width="2"/>`;
+      const midX = (uABx + uACx) / 2, midY = (uABy + uACy) / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 16;
+      svg += `<text x="${Ax + midX/midLen * labelR}" y="${Ay + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#178e8a" text-anchor="middle">${config.A2}</text>`;
+    }
+    
+    if (config.A3) {
+      // Angle 3: between AC and line a (going right)
+      const r = 26;
+      const x1 = Ax + r * uACx;
+      const y1 = Ay + r * uACy;
+      const x2 = Ax + r * 1;
+      const y2 = Ay;
+      const cross = uACx * 0 - uACy * 1;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Ax} ${Ay} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(168,216,214,0.3)" stroke="#178e8a" stroke-width="2"/>`;
+      const midX = (uACx + 1) / 2, midY = uACy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 18;
+      svg += `<text x="${Ax + midX/midLen * labelR}" y="${Ay + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#178e8a" text-anchor="middle">${config.A3}</text>`;
+    }
+    
+    if (config.B) {
+      const BAdx = -ABdx, BAdy = -ABdy;
+      const uBAx = BAdx / ABlen, uBAy = BAdy / ABlen;
+      const r = 26;
+      const x1 = Bx + r * 1;
+      const y1 = By;
+      const x2 = Bx + r * uBAx;
+      const y2 = By + r * uBAy;
+      const cross = 1 * uBAy;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Bx} ${By} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(200,85,61,0.12)" stroke="#c8553d" stroke-width="2"/>`;
+      const midX = (1 + uBAx) / 2, midY = uBAy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 16;
+      svg += `<text x="${Bx + midX/midLen * labelR}" y="${By + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#c8553d" text-anchor="middle">${config.B}</text>`;
+    }
+    
+    if (config.C) {
+      const CAdx = -ACdx, CAdy = -ACdy;
+      const uCAx = CAdx / AClen, uCAy = CAdy / AClen;
+      const r = 26;
+      const x1 = Cx + r * (-1);
+      const y1 = Cy;
+      const x2 = Cx + r * uCAx;
+      const y2 = Cy + r * uCAy;
+      const cross = (-1) * uCAy;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Cx} ${Cy} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(200,85,61,0.12)" stroke="#c8553d" stroke-width="2"/>`;
+      const midX = (-1 + uCAx) / 2, midY = uCAy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 16;
+      svg += `<text x="${Cx + midX/midLen * labelR}" y="${Cy + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#c8553d" text-anchor="middle">${config.C}</text>`;
+    }
+    
+    if (config.Cext) {
+      // Exterior angle at C (between line b going right and CA going up-left)
+      const uCAx = -ACdx / AClen, uCAy = -ACdy / AClen;
+      const r = 26;
+      const x1 = Cx + r * 1;
+      const y1 = Cy;
+      const x2 = Cx + r * uCAx;
+      const y2 = Cy + r * uCAy;
+      const cross = 1 * uCAy;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Cx} ${Cy} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(212,160,76,0.2)" stroke="#d4a04c" stroke-width="2"/>`;
+      const midX = (1 + uCAx) / 2, midY = uCAy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 18;
+      svg += `<text x="${Cx + midX/midLen * labelR}" y="${Cy + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#a47830" text-anchor="middle">${config.Cext}</text>`;
+    }
+    
+    svg += `</svg>`;
+    return svg;
+  }
+
+  // Angle bisector diagram - AB || CD, AC bisects angle BAD
+  function buildBisectorDiagram(config) {
+    const W = 540, H = 360;
+    
+    const yAB = 70, yCD = 290;
+    // A on top line, with rays going to B (left) and D (down-right)
+    // AC bisector goes down to point C on line CD
+    const Ax = 280, Ay = yAB;
+    const Bx = 60, By = yAB;       // B at far left on AB line
+    const Dx = 500, Dy = 230;      // D below-right (extends below the line a bit)
+    
+    // C should be on line CD, between A's projection and D's projection
+    // For visual clarity, place it to the LEFT of A's projection so AC angles open downward-left
+    const Cx = 180, Cy = yCD;
+    
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="540" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">`;
+    
+    // Line AB - extended through A so it shows continuation
+    svg += `<line x1="20" y1="${yAB}" x2="${Ax + 60}" y2="${yAB}" stroke="#1a2841" stroke-width="2.5"/>`;
+    // Line CD (full)
+    svg += `<line x1="20" y1="${yCD}" x2="${W-20}" y2="${yCD}" stroke="#1a2841" stroke-width="2.5"/>`;
+    // Parallel marks
+    svg += `<polygon points="${Ax + 40},${yAB-6} ${Ax + 52},${yAB} ${Ax + 40},${yAB+6}" fill="#1a2841"/>`;
+    svg += `<polygon points="${W-60},${yCD-6} ${W-48},${yCD} ${W-60},${yCD+6}" fill="#1a2841"/>`;
+    
+    // Ray AD
+    svg += `<line x1="${Ax}" y1="${Ay}" x2="${Dx}" y2="${Dy}" stroke="#1a2841" stroke-width="2.5"/>`;
+    // Bisector AC (red dashed-style for bisector emphasis)
+    svg += `<line x1="${Ax}" y1="${Ay}" x2="${Cx}" y2="${Cy}" stroke="#c8553d" stroke-width="2.5"/>`;
+    
+    // Vertex labels
+    svg += `<text x="${Bx - 16}" y="${By + 5}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">B</text>`;
+    svg += `<text x="${Ax - 6}" y="${Ay - 14}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">A</text>`;
+    svg += `<text x="${Dx + 8}" y="${Dy + 5}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">D</text>`;
+    svg += `<text x="${Cx - 6}" y="${Cy + 24}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">C</text>`;
+    
+    function unit(fromX, fromY, toX, toY) {
+      const dx = toX - fromX, dy = toY - fromY;
+      const len = Math.sqrt(dx*dx + dy*dy);
+      return [dx/len, dy/len];
+    }
+    
+    function drawAngle(cx, cy, u1, u2, color, fillC, label, r, labelOffset) {
+      const x1 = cx + r * u1[0], y1 = cy + r * u1[1];
+      const x2 = cx + r * u2[0], y2 = cy + r * u2[1];
+      const cross = u1[0] * u2[1] - u1[1] * u2[0];
+      const sweep = cross > 0 ? 1 : 0;
+      let s = `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="${fillC}" stroke="${color}" stroke-width="2"/>`;
+      if (label) {
+        const midX = (u1[0] + u2[0]) / 2, midY = (u1[1] + u2[1]) / 2;
+        const midLen = Math.sqrt(midX*midX + midY*midY);
+        const labelR = r + labelOffset;
+        s += `<text x="${cx + midX/midLen * labelR}" y="${cy + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="14" font-weight="700" fill="${color}" text-anchor="middle">${label}</text>`;
+      }
+      return s;
+    }
+    
+    // Direction vectors from A
+    const AB_dir = unit(Ax, Ay, Bx, By);  // points left
+    const AC_dir = unit(Ax, Ay, Cx, Cy);  // points down-left (bisector)
+    const AD_dir = unit(Ax, Ay, Dx, Dy);  // points down-right
+    
+    // Angle BAC: from AB (left) to AC (down-left). The bisected half on the LEFT.
+    // Use larger radius so labels don't collide
+    if (config.BAC) svg += drawAngle(Ax, Ay, AB_dir, AC_dir, '#178e8a', 'rgba(168,216,214,0.3)', config.BAC, 38, 22);
+    // Angle CAD: from AC to AD. The bisected half on the RIGHT/below.
+    // Smaller radius so it doesn't overlap with BAC label
+    if (config.CAD) svg += drawAngle(Ax, Ay, AC_dir, AD_dir, '#c8553d', 'rgba(200,85,61,0.15)', 22, 22);
+    // Need to handle CAD separately because labels collide - place CAD label on the OTHER side of AC
+    if (config.CAD) {
+      // Re-draw CAD with smaller radius and label
+      const r = 22;
+      const x1 = Ax + r * AC_dir[0], y1 = Ay + r * AC_dir[1];
+      const x2 = Ax + r * AD_dir[0], y2 = Ay + r * AD_dir[1];
+      const cross = AC_dir[0] * AD_dir[1] - AC_dir[1] * AD_dir[0];
+      const sweep = cross > 0 ? 1 : 0;
+      // Label position: midpoint of CAD direction, at radius+24
+      const midX = (AC_dir[0] + AD_dir[0]) / 2, midY = (AC_dir[1] + AD_dir[1]) / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      const labelR = r + 22;
+      // Don't redraw the path - it's already drawn, just add the label
+      svg += `<text x="${Ax + midX/midLen * labelR}" y="${Ay + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="14" font-weight="700" fill="#c8553d" text-anchor="middle">${config.CAD}</text>`;
+    }
+    
+    // Angle ACD at C - between CA (going up-right toward A) and CD direction (going right)
+    if (config.ACD) {
+      const CA = unit(Cx, Cy, Ax, Ay);  // up-right
+      const CD_dir = [1, 0];  // right
+      svg += drawAngle(Cx, Cy, CA, CD_dir, '#7d4e9e', 'rgba(125,78,158,0.15)', config.ACD, 32, 18);
+    }
+    
+    return svg + `</svg>`;
+  }
+
+  // Three lines, two transversals (problem type 4 from corresponding worksheet)
+  function buildThreeRaysDiagram(config) {
+    // Two parallel lines a and b
+    // Two rays going out from a single point P on line b: one going to upper-left (line c, ending on line a),
+    // and another going more upward (ray d through P)
+    // Actually based on the worksheet image: line c goes from upper-left to P on b (with 58° marked between c and ?), 
+    // d is another ray from P going upward, with 102° marked, and x is between d and b on the right side
+    
+    const W = 500, H = 280;
+    const yA = 70, yB = 200;
+    
+    // Line a
+    // P is the intersection point on line b
+    const Px = 280, Py = yB;
+    
+    // Point on line a where line c crosses (left side)
+    const C_a_x = 80, C_a_y = yA;
+    
+    // Top of ray d (upward direction)
+    const Dx = 230, Dy = 30;
+    
+    // Top of ray b (continues upward from P)
+    const Bx = 320, By = 30;
+    
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="500" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">`;
+    
+    // Parallel lines
+    svg += `<line x1="20" y1="${yA}" x2="${W-20}" y2="${yA}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<line x1="20" y1="${yB}" x2="${W-20}" y2="${yB}" stroke="#1a2841" stroke-width="2.5"/>`;
+    svg += `<polygon points="${W-60},${yA-6} ${W-48},${yA} ${W-60},${yA+6}" fill="#1a2841"/>`;
+    svg += `<polygon points="${W-60},${yB-6} ${W-48},${yB} ${W-60},${yB+6}" fill="#1a2841"/>`;
+    svg += `<text x="${C_a_x - 4}" y="${yA - 10}" font-family="Heebo, sans-serif" font-size="14" fill="#5a6b85" font-weight="500">a</text>`;
+    svg += `<text x="6" y="${yB+5}" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85" font-weight="500">b</text>`;
+    
+    // Ray c (from C_a downward through P, continuing left for label)
+    svg += `<line x1="${C_a_x - 60}" y1="${yA + (yA - yB) * (-60) / (Px - C_a_x)}" x2="${Px}" y2="${Py}" stroke="#c8553d" stroke-width="2.5"/>`;
+    // c label  
+    svg += `<text x="${C_a_x - 50}" y="${yA - 5}" font-family="Heebo, sans-serif" font-size="14" fill="#5a6b85" font-weight="500">c</text>`;
+    
+    // Ray d (from P upward)
+    svg += `<line x1="${Px}" y1="${Py}" x2="${Dx}" y2="${Dy}" stroke="#7d4e9e" stroke-width="2.5"/>`;
+    svg += `<text x="${Dx - 4}" y="${Dy - 6}" font-family="Heebo, sans-serif" font-size="14" fill="#7d4e9e" font-weight="700">d</text>`;
+    
+    // P label
+    svg += `<text x="${Px - 4}" y="${Py + 22}" font-family="Frank Ruhl Libre, serif" font-size="18" font-weight="700" fill="#1a2841">P</text>`;
+    
+    // Angles
+    // 58° at intersection of c with line a (between line a going left and line c going down-right)
+    if (config.angle58) {
+      const cdx = Px - C_a_x, cdy = Py - C_a_y;
+      const clen = Math.sqrt(cdx*cdx + cdy*cdy);
+      const ucx = cdx/clen, ucy = cdy/clen;
+      const r = 24;
+      const x1 = C_a_x + r * (-1);
+      const y1 = C_a_y;
+      const x2 = C_a_x + r * ucx;
+      const y2 = C_a_y + r * ucy;
+      const cross = (-1) * ucy - 0 * ucx;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${C_a_x} ${C_a_y} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(200,85,61,0.12)" stroke="#c8553d" stroke-width="2"/>`;
+      const midX = (-1 + ucx) / 2, midY = ucy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      svg += `<text x="${C_a_x + midX/midLen * (r+16)}" y="${C_a_y + midY/midLen * (r+16) + 5}" font-family="Frank Ruhl Libre, serif" font-size="16" font-weight="700" fill="#c8553d" text-anchor="middle">${config.angle58}</text>`;
+    }
+    
+    // 102° at P, between ray d (going up) and ray b right (line b going right)
+    // Actually based on image: 102° is between d going up and the imaginary continuation b going up-right
+    // Let's mark 102° between ray d and a continuation upward of line b through P
+    if (config.angle102) {
+      const ddx = Dx - Px, ddy = Dy - Py;
+      const dlen = Math.sqrt(ddx*ddx + ddy*ddy);
+      const udx = ddx/dlen, udy = ddy/dlen;
+      const r = 28;
+      // Between ray d (up-left) and line b (going right)
+      const x1 = Px + r * udx;
+      const y1 = Py + r * udy;
+      const x2 = Px + r * 1;
+      const y2 = Py;
+      const cross = udx * 0 - udy * 1;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Px} ${Py} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(125,78,158,0.15)" stroke="#7d4e9e" stroke-width="2"/>`;
+      const midX = (udx + 1) / 2, midY = udy / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      svg += `<text x="${Px + midX/midLen * (r+18)}" y="${Py + midY/midLen * (r+18) + 5}" font-family="Frank Ruhl Libre, serif" font-size="16" font-weight="700" fill="#7d4e9e" text-anchor="middle">${config.angle102}</text>`;
+    }
+    
+    // x angle at P, between ray c going up-left and ray d going up
+    if (config.angleX) {
+      const cdx = C_a_x - Px, cdy = C_a_y - Py;
+      const clen = Math.sqrt(cdx*cdx + cdy*cdy);
+      const ucx = cdx/clen, ucy = cdy/clen;
+      const ddx = Dx - Px, ddy = Dy - Py;
+      const dlen = Math.sqrt(ddx*ddx + ddy*ddy);
+      const udx = ddx/dlen, udy = ddy/dlen;
+      const r = 22;
+      const x1 = Px + r * ucx;
+      const y1 = Py + r * ucy;
+      const x2 = Px + r * udx;
+      const y2 = Py + r * udy;
+      const cross = ucx * udy - ucy * udx;
+      const sweep = cross > 0 ? 1 : 0;
+      svg += `<path d="M ${Px} ${Py} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="rgba(168,216,214,0.3)" stroke="#178e8a" stroke-width="2"/>`;
+      const midX = (ucx + udx) / 2, midY = (ucy + udy) / 2;
+      const midLen = Math.sqrt(midX*midX + midY*midY);
+      svg += `<text x="${Px + midX/midLen * (r+16)}" y="${Py + midY/midLen * (r+16) + 5}" font-family="Frank Ruhl Libre, serif" font-size="16" font-weight="700" fill="#178e8a" text-anchor="middle">${config.angleX}</text>`;
+    }
+    
+    return svg + `</svg>`;
+  }
+
+  // Zigzag/Z-shape diagram - quadrilateral with AB || CD and BC, AD as sides forming Z
+  function buildZigzagDiagram(config) {
+    // ABCD quadrilateral where AB and CD are parallel
+    // Shape: A top-left, B top-right; C bottom-left, D bottom-right
+    // Sides: A-B (top), C-D (bottom, parallel to AB), and the connecting sides
+    // For the "Z" shape: the connecting lines are A-D (going down-right) and B-C (going down-left), forming an X
+    // OR for the shape in worksheet: A-D and B-C as sides (so it's a self-intersecting quadrilateral)
+    
+    const W = 500, H = 300;
+    
+    const Ax = 70, Ay = 90;
+    const Bx = 280, By = 90;
+    const Cx = 100, Cy = 240;
+    const Dx = 380, Dy = 240;
+    
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="500" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">`;
+    
+    // The four sides of the self-intersecting quadrilateral ABDC:
+    // A-B (top), B-C (diagonal down-left), C-D (bottom), D-A would close... 
+    // But shape is: A--B--D--C--A actually... or A--D--B--C ?
+    // The classic zigzag/butterfly Z-shape: A--B--C--D--A but that creates a crossed quadrilateral
+    // Actually simplest: just draw 4 segments forming the Z:
+    //   A--B (top horizontal), B--C (diagonal crossing the figure to lower-left), C--D (bottom horizontal)
+    //   This is the "Z" shape with AB || CD
+    
+    // Top segment AB
+    svg += `<line x1="${Ax}" y1="${Ay}" x2="${Bx}" y2="${By}" stroke="#1a2841" stroke-width="2.5"/>`;
+    // Diagonal BC (going from top-right to bottom-left)
+    svg += `<line x1="${Bx}" y1="${By}" x2="${Cx}" y2="${Cy}" stroke="#c8553d" stroke-width="2.5"/>`;
+    // Bottom segment CD
+    svg += `<line x1="${Cx}" y1="${Cy}" x2="${Dx}" y2="${Dy}" stroke="#1a2841" stroke-width="2.5"/>`;
+    
+    // Parallel marks (single tick on AB and CD to indicate parallel)
+    const midABx = (Ax + Bx) / 2, midABy = Ay;
+    const midCDx = (Cx + Dx) / 2, midCDy = Cy;
+    svg += `<line x1="${midABx - 4}" y1="${midABy - 6}" x2="${midABx + 4}" y2="${midABy + 6}" stroke="#1a2841" stroke-width="2"/>`;
+    svg += `<line x1="${midCDx - 4}" y1="${midCDy - 6}" x2="${midCDx + 4}" y2="${midCDy + 6}" stroke="#1a2841" stroke-width="2"/>`;
+    
+    // Vertex labels
+    svg += `<text x="${Ax - 16}" y="${Ay + 5}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">A</text>`;
+    svg += `<text x="${Bx + 8}" y="${By + 5}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">B</text>`;
+    svg += `<text x="${Cx - 16}" y="${Cy + 5}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">C</text>`;
+    svg += `<text x="${Dx + 8}" y="${Dy + 5}" font-family="Frank Ruhl Libre, serif" font-size="20" font-weight="700" fill="#1a2841">D</text>`;
+    
+    function unit(fromX, fromY, toX, toY) {
+      const dx = toX - fromX, dy = toY - fromY;
+      const len = Math.sqrt(dx*dx + dy*dy);
+      return [dx/len, dy/len];
+    }
+    
+    function drawAngle(cx, cy, u1, u2, color, fillC, label, r, labelOffset) {
+      const x1 = cx + r * u1[0], y1 = cy + r * u1[1];
+      const x2 = cx + r * u2[0], y2 = cy + r * u2[1];
+      const cross = u1[0] * u2[1] - u1[1] * u2[0];
+      const sweep = cross > 0 ? 1 : 0;
+      let s = `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2} Z" fill="${fillC}" stroke="${color}" stroke-width="2"/>`;
+      if (label) {
+        const midX = (u1[0] + u2[0]) / 2, midY = (u1[1] + u2[1]) / 2;
+        const midLen = Math.sqrt(midX*midX + midY*midY);
+        const labelR = r + labelOffset;
+        s += `<text x="${cx + midX/midLen * labelR}" y="${cy + midY/midLen * labelR + 5}" font-family="Frank Ruhl Libre, serif" font-size="14" font-weight="700" fill="${color}" text-anchor="middle">${label}</text>`;
+      }
+      return s;
+    }
+    
+    // Mark angle B (between BA going left and BC going down-left)
+    const BA = unit(Bx, By, Ax, Ay);  // going left
+    const BC = unit(Bx, By, Cx, Cy);  // going down-left
+    svg += drawAngle(Bx, By, BC, BA, '#178e8a', 'rgba(168,216,214,0.3)', config.angleB || '∢B', 26, 16);
+    
+    // Mark angle C (between CB going up-right and CD going right)
+    const CB = unit(Cx, Cy, Bx, By);  // going up-right
+    const CD = unit(Cx, Cy, Dx, Dy);  // going right
+    svg += drawAngle(Cx, Cy, CD, CB, '#c8553d', 'rgba(200,85,61,0.15)', config.angleC || '∢C', 26, 16);
+    
+    return svg + `</svg>`;
+  }
+
+  // ============ STATIC DIAGRAMS for LEARN section ============
+  function renderLearnDiagrams() {
+    document.getElementById('diagram-all-angles').innerHTML = buildNumberedDiagram();
+    
+    document.getElementById('diagram-internal').innerHTML += buildDiagram({
+      direction: 'rl',
+      angles: [
+        { line: 'a', sector: 'BL', label: 'α', color: 'teal' },
+        { line: 'b', sector: 'AR', label: 'β', color: 'teal' }
+      ]
+    });
+    
+    document.getElementById('diagram-external').innerHTML += buildDiagram({
+      direction: 'rl',
+      angles: [
+        { line: 'a', sector: 'AL', label: 'α', color: 'red' },
+        { line: 'b', sector: 'BR', label: 'β', color: 'red' }
+      ]
+    });
+    
+    document.getElementById('diagram-corresponding').innerHTML = buildDiagram({
+      direction: 'rl',
+      angles: [
+        { line: 'a', sector: 'AR', label: 'α', color: 'teal' },
+        { line: 'b', sector: 'AR', label: 'β', color: 'teal' }
+      ]
+    }) + `<div class="diagram-caption">α ו-β באותו צד של החותך, מעל הישר המקביל שלהן (צורת F)</div>`;
+    
+    document.getElementById('diagram-cointerior').innerHTML = buildDiagram({
+      direction: 'rl',
+      angles: [
+        { line: 'a', sector: 'BR', label: 'α', color: 'red' },
+        { line: 'b', sector: 'AR', label: 'β', color: 'red' }
+      ]
+    }) + `<div class="diagram-caption">α ו-β באותו צד, שתיהן בין הישרים (צורת U)</div>`;
+  }
+
+  // ============ EXAMPLES DATA ============
+  const examples = [
+    {
+      title: 'מתחלפות פנימיות - חישוב פשוט',
+      difficulty: 'easy',
+      topic: 'מתחלפות',
+      question: 'נתון: a ‖ b. חשבו את α.',
+      diagram: () => buildDiagram({
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BL', label: 'α', color: 'teal' },
+          { line: 'b', sector: 'AR', label: '73°', color: 'red' }
+        ]
+      }),
+      steps: [
+        'מזהים: 73° על הישר b ו-α על הישר a, בצדדים מנוגדים של החותך.',
+        'הזוויות יוצרות צורת Z - אלה זוויות מתחלפות.',
+        'מכיוון ש-a ‖ b, הזוויות המתחלפות שוות:',
+        { formula: 'α = 73°' }
+      ]
+    },
+    {
+      title: 'מתחלפות עם משוואה',
+      difficulty: 'easy',
+      topic: 'מתחלפות',
+      question: 'נתון: a ‖ b. הזוויות המתחלפות הן 4α ו-(2α + 60°). חשבו את α.',
+      diagram: () => buildDiagram({
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BL', label: '4α', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2α+60°', color: 'teal' }
+        ]
+      }),
+      steps: [
+        'הזוויות מתחלפות בין מקבילים → שוות:',
+        { formula: '4α = 2α + 60°' },
+        { formula: '2α = 60°' },
+        { formula: 'α = 30°' },
+        'בדיקה: 4·30 = 120°, 2·30 + 60 = 120° ✓'
+      ]
+    },
+    {
+      title: 'חד-צדדיות',
+      difficulty: 'medium',
+      topic: 'חד-צדדיות',
+      question: 'נתון: a ‖ b. הזווית 82° על הישר a, ו-α על הישר b. שתיהן באותו צד של החותך, בין הישרים. חשבו את α.',
+      diagram: () => buildDiagram({
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BR', label: '82°', color: 'red' },
+          { line: 'b', sector: 'AR', label: 'α', color: 'teal' }
+        ]
+      }),
+      steps: [
+        'הזוויות באותו צד של החותך, בין הישרים → חד-צדדיות (צורת U).',
+        'בין מקבילים, סכומן 180°:',
+        { formula: 'α + 82° = 180°' },
+        { formula: 'α = 98°' }
+      ]
+    },
+    {
+      title: 'מתחלפות חיצוניות',
+      difficulty: 'medium',
+      topic: 'מתחלפות',
+      question: 'נתון: a ‖ b. הזווית 68° מעל ישר a (מחוץ), ו-α מתחת לישר b (מחוץ), בצד שני של החותך. חשבו את α.',
+      diagram: () => buildDiagram({
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'AL', label: '68°', color: 'red' },
+          { line: 'b', sector: 'BR', label: 'α', color: 'teal' }
+        ]
+      }),
+      steps: [
+        'שתי הזוויות מחוץ לישרים, בצדדים מנוגדים → מתחלפות חיצוניות.',
+        'בין מקבילים, מתחלפות חיצוניות שוות:',
+        { formula: 'α = 68°' }
+      ]
+    },
+    {
+      title: 'מתאימות עם משוואה',
+      difficulty: 'medium',
+      topic: 'מתאימות',
+      question: 'נתון: a ‖ b. הזוויות המתאימות הן 3x + 30° ו-2x + 70°. חשבו את x.',
+      diagram: () => buildDiagram({
+        direction: 'lr',
+        angles: [
+          { line: 'a', sector: 'AR', label: '3x+30°', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2x+70°', color: 'teal' }
+        ]
+      }),
+      steps: [
+        'מתאימות בין מקבילים → שוות:',
+        { formula: '3x + 30° = 2x + 70°' },
+        { formula: 'x = 40°' },
+        'בדיקה: 3·40 + 30 = 150°, 2·40 + 70 = 150° ✓'
+      ]
+    },
+    {
+      title: 'חד-צדדיות עם משוואה',
+      difficulty: 'medium',
+      topic: 'חד-צדדיות',
+      question: 'נתון: a ‖ b. הזוויות החד-צדדיות הן (x + 34°) ו-(2x − 16°). חשבו את x.',
+      diagram: () => buildDiagram({
+        direction: 'lr',
+        angles: [
+          { line: 'a', sector: 'BR', label: 'x+34°', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2x−16°', color: 'teal' }
+        ]
+      }),
+      steps: [
+        'חד-צדדיות בין מקבילים → סכומן 180°:',
+        { formula: '(x + 34°) + (2x − 16°) = 180°' },
+        { formula: '3x + 18° = 180°' },
+        { formula: 'x = 54°' }
+      ]
+    },
+    {
+      title: 'משולש בין מקבילים',
+      difficulty: 'hard',
+      topic: 'משולש',
+      question: 'נתון: a ‖ b. נקודה A על ישר a, B ו-C על ישר b. בצומת A מסומנות 3 זוויות: A₁ (משמאל), A₂ (במשולש), A₃ (מימין). הזווית ABC על ישר b שווה 70°, והזווית BCA היא α, וזווית חיצונית ל-C היא α + 60°. חשבו את A₁, A₂, A₃.',
+      diagram: () => buildTriangleDiagram({
+        A1: 'A₁', A2: 'A₂', A3: 'A₃',
+        B: '70°', C: 'α', Cext: 'α+60°'
+      }),
+      steps: [
+        'הזווית α + (α+60°) = 180° (זוויות צמודות על הישר b בנקודה C):',
+        { formula: '2α + 60° = 180°' },
+        { formula: 'α = 60°' },
+        'A₁ מתחלפת עם זווית ABC = 70°, אז:',
+        { formula: 'A₁ = 70°' },
+        'A₃ מתחלפת עם α (זווית BCA = 60°):',
+        { formula: 'A₃ = 60°' },
+        'סכום שלוש הזוויות בקודקוד A על ישר ישר = 180°:',
+        { formula: 'A₁ + A₂ + A₃ = 180°' },
+        { formula: 'A₂ = 180° − 70° − 60° = 50°' }
+      ]
+    },
+    {
+      title: 'חוצה זווית',
+      difficulty: 'hard',
+      topic: 'חוצה זווית',
+      question: 'נתון: AB ‖ CD. AC חוצה את זווית BAD. הזוויות בקודקוד A הן: 2x − 10° (מצד B) ו-(3x − 40°) (מצד D). חשבו את x ואת זווית ACD.',
+      diagram: () => buildBisectorDiagram({
+        BAC: '2x−10°', CAD: '3x−40°', ACD: '?'
+      }),
+      steps: [
+        'AC חוצה זווית BAD → שתי הזוויות בקודקוד A שוות:',
+        { formula: '2x − 10° = 3x − 40°' },
+        { formula: 'x = 30°' },
+        'כלומר, כל אחת מהזוויות בקודקוד A היא: 2·30 − 10 = 50°.',
+        'הזווית ACD מתחלפת עם זווית CAB (כי AB ‖ CD ו-AC חותך):',
+        { formula: 'ACD = 50°' }
+      ]
+    },
+    {
+      title: 'שתי זוויות לא ידועות (x ו-y)',
+      difficulty: 'hard',
+      topic: 'מתאימות',
+      question: 'נתון: a ‖ b. נקודה אחת על החותך נחשפת בקודקוד שלישי - שני קווים יוצאים ממנה. הזוויות שמסומנות הן: x+y מצד אחד, 5x−y מצד שני, ו-140° על המקבילה. חשבו את x ו-y.',
+      diagram: () => `<svg viewBox="0 0 500 280" width="500" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <line x1="20" y1="80" x2="480" y2="80" stroke="#1a2841" stroke-width="2.5"/>
+        <line x1="20" y1="200" x2="480" y2="200" stroke="#1a2841" stroke-width="2.5"/>
+        <polygon points="440,74 452,80 440,86" fill="#1a2841"/>
+        <polygon points="440,194 452,200 440,206" fill="#1a2841"/>
+        <text x="6" y="85" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85">a</text>
+        <text x="6" y="205" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85">b</text>
+        <line x1="200" y1="30" x2="320" y2="250" stroke="#c8553d" stroke-width="2.5"/>
+        <text x="180" y="65" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#c8553d">x+y</text>
+        <text x="245" y="65" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#178e8a">5x−y</text>
+        <text x="280" y="225" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#c8553d">140°</text>
+      </svg>`,
+      steps: [
+        'הזוויות x+y ו-5x−y הן צמודות על הישר a (סכום 180°):',
+        { formula: '(x+y) + (5x−y) = 180°' },
+        { formula: '6x = 180°  ⟹  x = 30°' },
+        '5x − y מתחלפת עם הזווית 140° (ובין מקבילים שוות):',
+        { formula: '5·30° − y = 140°' },
+        { formula: 'y = 10°' },
+        'תשובה: x = 30°, y = 10°'
+      ]
+    },
+    {
+      title: 'מסכמת: כל הזוויות יחד',
+      difficulty: 'medium',
+      topic: 'סיכום',
+      question: 'נתון: a ‖ b, וזווית 1 = 70°. חשבו את כל יתר 7 הזוויות, וזהו את היחס לכל אחת.',
+      diagram: () => buildNumberedDiagram(),
+      steps: [
+        '∢3 = 70° (קודקודית ל-1)',
+        '∢2 = 110° (משלימה ל-1, סכום 180°)',
+        '∢4 = 110° (קודקודית ל-2)',
+        '∢5 = 70° (מתאימה ל-1)',
+        '∢6 = 110° (מתאימה ל-2)',
+        '∢7 = 70° (מתחלפת חיצונית עם 1, או קודקודית ל-5)',
+        '∢8 = 110° (קודקודית ל-6)',
+        { formula: 'סיכום: רק שני ערכים אפשריים - 70° ו-110°' }
+      ]
+    }
+  ];
+
+  function renderExamples() {
+    const container = document.getElementById('examples-content');
+    let html = '';
+    examples.forEach((ex, i) => {
+      const diffLabel = { easy: 'קל', medium: 'בינוני', hard: 'מאתגר' }[ex.difficulty];
+      html += `
+        <div class="card">
+          <h2>
+            <span class="difficulty ${ex.difficulty}">${diffLabel}</span>
+            דוגמה ${i+1}: ${ex.title}
+          </h2>
+          <p style="margin-bottom: 8px;">
+            <span class="topic-tag">${ex.topic}</span>
+          </p>
+          <p>${ex.question}</p>
+          <div class="diagram-wrap">${ex.diagram()}</div>
+          <div class="example">
+            <div class="example-title">פתרון מודרך</div>
+            ${ex.steps.map(s => {
+              if (typeof s === 'string') return `<div class="step">${s}</div>`;
+              if (s.formula) return `<div class="formula">${s.formula}</div>`;
+              return '';
+            }).join('')}
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  // ============ QUIZ DATA ============
+  const allQuestions = [
+    // === BASIC ===
+    {
+      topic: 'basic', diff: 'easy',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. חשבו את α (זוויות מתחלפות פנימיות).',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BL', label: '65°', color: 'red' },
+          { line: 'b', sector: 'AR', label: 'α', color: 'teal' }
+        ]
+      },
+      hint: 'מתחלפות בין מקבילים שוות.',
+      answer: 65,
+      explain: 'זוויות מתחלפות בין מקבילים → שוות. α = 65°.'
+    },
+    {
+      topic: 'basic', diff: 'easy',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. חשבו את α.',
+      diagramConfig: {
+        direction: 'lr',
+        angles: [
+          { line: 'a', sector: 'BR', label: '110°', color: 'red' },
+          { line: 'b', sector: 'AL', label: 'α', color: 'teal' }
+        ]
+      },
+      hint: 'גם זווית קהה יכולה להיות מתחלפת.',
+      answer: 110,
+      explain: 'מתחלפות בין מקבילים שוות. α = 110°.'
+    },
+    {
+      topic: 'basic', diff: 'easy',
+      type: 'choice',
+      question: 'איזה זוג זוויות בין מקבילים סכומן הוא 180°?',
+      noDiagram: true,
+      choices: ['מתחלפות', 'מתאימות', 'חד-צדדיות', 'קודקודיות'],
+      correctIndex: 2,
+      explain: 'זוויות חד-צדדיות (אותו צד של החותך, בין הישרים) - סכומן 180°. השאר שוות.'
+    },
+    
+    // === ALTERNATE ===
+    {
+      topic: 'alternate', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזווית 4α מתחלפת עם 2α + 60°. חשבו את α.',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BL', label: '4α', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2α+60°', color: 'teal' }
+        ]
+      },
+      hint: 'משוואה: 4α = 2α + 60°.',
+      answer: 30,
+      explain: 'מתחלפות שוות: 4α = 2α + 60° → 2α = 60° → α = 30°.'
+    },
+    {
+      topic: 'alternate', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. α מתחלפת עם 3α − 40°. חשבו את α.',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BL', label: 'α', color: 'red' },
+          { line: 'b', sector: 'AR', label: '3α−40°', color: 'teal' }
+        ]
+      },
+      hint: 'בנו משוואה ופתרו.',
+      answer: 20,
+      explain: 'α = 3α − 40° → 40° = 2α → α = 20°.'
+    },
+    {
+      topic: 'alternate', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזווית 5α − 20° מעל a (מחוץ), והזווית 3α + 10° מתחת ל-b (מחוץ), בצד שני של החותך. חשבו את α.',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'AL', label: '5α−20°', color: 'red' },
+          { line: 'b', sector: 'BR', label: '3α+10°', color: 'teal' }
+        ]
+      },
+      hint: 'מתחלפות חיצוניות גם הן שוות בין מקבילים.',
+      answer: 15,
+      explain: 'מתחלפות חיצוניות שוות: 5α − 20° = 3α + 10° → 2α = 30° → α = 15°.'
+    },
+    
+    // === CORRESPONDING ===
+    {
+      topic: 'corresponding', diff: 'easy',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. שתי הזוויות מתאימות - אחת על a (78°) והשנייה על b (α). חשבו את α.',
+      diagramConfig: {
+        direction: 'lr',
+        angles: [
+          { line: 'a', sector: 'AR', label: '78°', color: 'red' },
+          { line: 'b', sector: 'AR', label: 'α', color: 'teal' }
+        ]
+      },
+      hint: 'מתאימות (צורת F) שוות בין מקבילים.',
+      answer: 78,
+      explain: 'מתאימות בין מקבילים שוות. α = 78°.'
+    },
+    {
+      topic: 'corresponding', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזוויות המתאימות 3x + 30° ו-2x + 70°. חשבו את x.',
+      diagramConfig: {
+        direction: 'lr',
+        angles: [
+          { line: 'a', sector: 'AR', label: '3x+30°', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2x+70°', color: 'teal' }
+        ]
+      },
+      hint: '3x + 30° = 2x + 70°.',
+      answer: 40,
+      explain: 'מתאימות שוות: 3x + 30 = 2x + 70 → x = 40°.'
+    },
+    {
+      topic: 'corresponding', diff: 'easy',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזווית המתאימה ל-α היא 50°. חשבו את α.',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'AR', label: '50°', color: 'red' },
+          { line: 'b', sector: 'AR', label: 'α', color: 'teal' }
+        ]
+      },
+      hint: 'מתאימות שוות.',
+      answer: 50,
+      explain: 'α = 50° כי זוויות מתאימות בין מקבילים שוות.'
+    },
+    
+    // === CO-INTERIOR (חד-צדדיות) ===
+    {
+      topic: 'cointerior', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזוויות החד-צדדיות 82° ו-α (אותו צד של החותך, בין הישרים). חשבו את α.',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BR', label: '82°', color: 'red' },
+          { line: 'b', sector: 'AR', label: 'α', color: 'teal' }
+        ]
+      },
+      hint: 'סכום חד-צדדיות = 180°.',
+      answer: 98,
+      explain: 'חד-צדדיות בין מקבילים: α + 82° = 180° → α = 98°.'
+    },
+    {
+      topic: 'cointerior', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזוויות החד-צדדיות (x + 34°) ו-(2x − 16°). חשבו את x.',
+      diagramConfig: {
+        direction: 'lr',
+        angles: [
+          { line: 'a', sector: 'BR', label: 'x+34°', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2x−16°', color: 'teal' }
+        ]
+      },
+      hint: 'סכומן 180°.',
+      answer: 54,
+      explain: '(x + 34°) + (2x − 16°) = 180° → 3x + 18° = 180° → x = 54°.'
+    },
+    {
+      topic: 'cointerior', diff: 'medium',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. הזוויות החד-צדדיות הן 100° ו-(2α + 20°). חשבו את α.',
+      diagramConfig: {
+        direction: 'rl',
+        angles: [
+          { line: 'a', sector: 'BR', label: '100°', color: 'red' },
+          { line: 'b', sector: 'AR', label: '2α+20°', color: 'teal' }
+        ]
+      },
+      hint: 'סכומן 180°.',
+      answer: 30,
+      explain: '100° + (2α + 20°) = 180° → 2α = 60° → α = 30°.'
+    },
+    
+    // === ADVANCED ===
+    {
+      topic: 'advanced', diff: 'hard',
+      type: 'numeric',
+      question: 'נתון: AB ‖ CD. AC חוצה זווית BAD. הזוויות בקודקוד A הן 2x − 10° ו-3x − 40°. חשבו את x.',
+      diagram: () => buildBisectorDiagram({
+        BAC: '2x−10°', CAD: '3x−40°'
+      }),
+      hint: 'חוצה זווית → שתי הזוויות שוות.',
+      answer: 30,
+      explain: 'AC חוצה זווית, אז: 2x − 10° = 3x − 40° → x = 30°.'
+    },
+    {
+      topic: 'advanced', diff: 'hard',
+      type: 'numeric',
+      question: 'נתון: AB ‖ CD. AC חוצה זווית BAD. ידוע שזווית CAD = 50°. חשבו את זווית ACD.',
+      diagram: () => buildBisectorDiagram({
+        BAC: '50°', CAD: '50°', ACD: '?'
+      }),
+      hint: 'ACD מתחלפת עם CAB.',
+      answer: 50,
+      explain: 'מאחר ש-AB ‖ CD ו-AC חותך, ACD ו-CAB מתחלפות → שוות. CAB = 50° (חוצה), אז ACD = 50°.'
+    },
+    {
+      topic: 'advanced', diff: 'hard',
+      type: 'choice',
+      question: 'נתון: AB ‖ CD ו-∢C > ∢D. בצורת זיג-זג ABCD איזה יחס מתקיים בין ∢A ל-∢B?',
+      diagram: () => buildZigzagDiagram({}),
+      hint: 'חשבו: A מתחלפת עם זווית פנימית כלשהי, וכך גם B.',
+      choices: ['∢A > ∢B', '∢A = ∢B', '∢A < ∢B', 'אי אפשר לקבוע'],
+      correctIndex: 2,
+      explain: 'אם נסמן את הזווית בקודקוד B כשתי זוויות חלקיות (BCA ו-CBD), הן מתחלפות עם A ו-C בהתאמה. בגלל ש-C > D וזוויות מתחלפות שוות → A < B.'
+    },
+    {
+      topic: 'advanced', diff: 'hard',
+      type: 'numeric',
+      question: 'נתון: a ‖ b. בנקודה אחת על a יש זוויות x+y ו-5x−y (צמודות על a, סכום 180°). הזווית 5x−y מתחלפת עם 140° על b. חשבו את x.',
+      diagram: () => `<svg viewBox="0 0 500 280" width="500" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">
+        <line x1="20" y1="80" x2="480" y2="80" stroke="#1a2841" stroke-width="2.5"/>
+        <line x1="20" y1="200" x2="480" y2="200" stroke="#1a2841" stroke-width="2.5"/>
+        <polygon points="440,74 452,80 440,86" fill="#1a2841"/>
+        <polygon points="440,194 452,200 440,206" fill="#1a2841"/>
+        <text x="6" y="85" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85">a</text>
+        <text x="6" y="205" font-family="Heebo, sans-serif" font-size="16" fill="#5a6b85">b</text>
+        <line x1="200" y1="30" x2="320" y2="250" stroke="#c8553d" stroke-width="2.5"/>
+        <text x="180" y="65" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#c8553d">x+y</text>
+        <text x="245" y="65" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#178e8a">5x−y</text>
+        <text x="280" y="225" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#c8553d">140°</text>
+      </svg>`,
+      hint: 'משתי משוואות: צמודות → 180°, ומתחלפות → שוות.',
+      answer: 30,
+      explain: '(x+y) + (5x−y) = 180° → 6x = 180° → x = 30°.'
+    }
+  ];
+
+  // ============ QUIZ STATE ============
+  let currentTopic = 'all';
+  let questions = [];
+  let currentQ = 0;
+  let score = 0;
+  let answered = false;
+
+  function filterQuestions(topic) {
+    if (topic === 'all') return [...allQuestions];
+    return allQuestions.filter(q => q.topic === topic);
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTopic = btn.dataset.topic;
+      questions = filterQuestions(currentTopic);
+      currentQ = 0;
+      score = 0;
+      renderQuestion();
+    });
+  });
+
+  function getDiagram(q) {
+    if (q.diagram) return q.diagram();
+    if (q.diagramConfig) return buildDiagram(q.diagramConfig);
+    return '';
+  }
+
+  function renderQuestion() {
+    if (questions.length === 0) {
+      document.getElementById('quizContent').innerHTML = '<p style="text-align:center; padding:40px;">אין שאלות בנושא הזה.</p>';
+      return;
+    }
+    
+    const q = questions[currentQ];
+    const total = questions.length;
+    
+    document.getElementById('qIndicator').textContent = `${currentQ + 1} מתוך ${total}`;
+    document.getElementById('progressFill').style.width = `${(currentQ / total) * 100}%`;
+    document.getElementById('scoreBadge').textContent = `ניקוד: ${score}`;
+    
+    answered = false;
+    
+    const diffLabel = { easy: 'קל', medium: 'בינוני', hard: 'מאתגר' }[q.diff];
+    
+    let html = `<div class="question">
+      <span class="qnum">שאלה ${currentQ + 1}.</span>
+      <span class="difficulty ${q.diff}">${diffLabel}</span>
+      ${q.question}
+    </div>`;
+    
+    if (!q.noDiagram) {
+      const diagramHTML = getDiagram(q);
+      if (diagramHTML) html += `<div class="diagram-wrap">${diagramHTML}</div>`;
+    }
+    
+    if (q.type === 'numeric') {
+      html += `
+        <div class="answer-row">
+          <label for="ansInput">התשובה:</label>
+          <input type="number" id="ansInput" placeholder="0" step="any" />
+          <span style="font-family:'Frank Ruhl Libre',serif; font-size:1.2rem;">°</span>
+        </div>
+      `;
+    } else if (q.type === 'choice') {
+      html += `<div class="choices">`;
+      q.choices.forEach((c, i) => {
+        html += `<div class="choice" data-index="${i}">${c}</div>`;
+      });
+      html += `</div>`;
+    }
+    
+    html += `<div class="feedback" id="feedback"></div>`;
+    html += `<div class="btn-row">
+      <button class="btn btn-accent" id="checkBtn">בדיקת תשובה</button>
+      ${q.hint ? '<button class="btn btn-ghost" id="hintBtn">רמז 💡</button>' : ''}
+      <button class="btn" id="nextBtn" style="display:none;">${currentQ < total - 1 ? 'שאלה הבאה ←' : 'סיום'}</button>
+    </div>`;
+    
+    document.getElementById('quizContent').innerHTML = html;
+    
+    if (q.type === 'choice') {
+      document.querySelectorAll('.choice').forEach(c => {
+        c.addEventListener('click', () => {
+          if (answered) return;
+          document.querySelectorAll('.choice').forEach(x => x.classList.remove('selected'));
+          c.classList.add('selected');
+        });
+      });
+    } else if (q.type === 'numeric') {
+      const input = document.getElementById('ansInput');
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !answered) checkAnswer();
+      });
+      setTimeout(() => input.focus(), 100);
+    }
+    
+    document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+    if (q.hint) {
+      document.getElementById('hintBtn').addEventListener('click', () => {
+        const fb = document.getElementById('feedback');
+        fb.className = 'feedback show hint';
+        fb.innerHTML = `<div class="feedback-title">💡 רמז</div><div class="feedback-explain">${q.hint}</div>`;
+      });
+    }
+    document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+  }
+
+  function checkAnswer() {
+    if (answered) return;
+    const q = questions[currentQ];
+    const fb = document.getElementById('feedback');
+    let isCorrect = false;
+    
+    if (q.type === 'numeric') {
+      const val = parseFloat(document.getElementById('ansInput').value);
+      if (isNaN(val)) {
+        fb.className = 'feedback show wrong';
+        fb.innerHTML = `<div class="feedback-title">⚠ לא הוזנה תשובה</div><div class="feedback-explain">אנא הקלידו ערך מספרי.</div>`;
+        return;
+      }
+      isCorrect = Math.abs(val - q.answer) < 0.01;
+    } else if (q.type === 'choice') {
+      const selected = document.querySelector('.choice.selected');
+      if (!selected) {
+        fb.className = 'feedback show wrong';
+        fb.innerHTML = `<div class="feedback-title">⚠ לא נבחרה תשובה</div><div class="feedback-explain">אנא בחרו אחת מהאפשרויות.</div>`;
+        return;
+      }
+      const idx = parseInt(selected.dataset.index);
+      isCorrect = idx === q.correctIndex;
+      
+      document.querySelectorAll('.choice').forEach((c, i) => {
+        c.style.pointerEvents = 'none';
+        if (i === q.correctIndex) c.classList.add('correct');
+        else if (i === idx && !isCorrect) c.classList.add('wrong');
+      });
+    }
+    
+    answered = true;
+    
+    if (isCorrect) {
+      score += 10;
+      fb.className = 'feedback show correct';
+      fb.innerHTML = `<div class="feedback-title">✓ נכון!</div><div class="feedback-explain">${q.explain}</div>`;
+    } else {
+      fb.className = 'feedback show wrong';
+      const correctText = q.type === 'numeric' ? `${q.answer}°` : q.choices[q.correctIndex];
+      fb.innerHTML = `<div class="feedback-title">✗ לא מדויק</div><div class="feedback-explain">התשובה הנכונה: <strong>${correctText}</strong>.<br>${q.explain}</div>`;
+    }
+    
+    document.getElementById('scoreBadge').textContent = `ניקוד: ${score}`;
+    document.getElementById('checkBtn').style.display = 'none';
+    const hintBtn = document.getElementById('hintBtn');
+    if (hintBtn) hintBtn.style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'inline-block';
+  }
+
+  function nextQuestion() {
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+      document.getElementById('practice').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    const total = questions.length;
+    const maxScore = total * 10;
+    const percent = Math.round((score / maxScore) * 100);
+    
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('qIndicator').textContent = 'הסתיים!';
+    
+    let emoji, message;
+    if (percent === 100) { emoji = '🏆'; message = 'מושלם! שולט/ת בנושא לחלוטין'; }
+    else if (percent >= 80) { emoji = '⭐'; message = 'מצוין! הבנה חזקה'; }
+    else if (percent >= 60) { emoji = '👍'; message = 'יפה מאוד'; }
+    else if (percent >= 40) { emoji = '📚'; message = 'כדאי לחזור על ההסבר והדוגמאות'; }
+    else { emoji = '💪'; message = 'התחילו מההסבר ותתקדמו לאט'; }
+    
+    document.getElementById('quizContent').innerHTML = `
+      <div class="result-screen">
+        <div class="result-emoji">${emoji}</div>
+        <div class="result-score">${score} / ${maxScore}</div>
+        <div style="font-family:'Frank Ruhl Libre',serif; font-size:1.5rem; margin-bottom:20px;">${percent}% תשובות נכונות</div>
+        <p style="font-size:1.1rem; color:var(--ink-soft); margin-bottom:24px;">${message}</p>
+        <div class="btn-row" style="justify-content:center;">
+          <button class="btn btn-accent" onclick="restartQuiz()">תרגול מחדש ↻</button>
+          <button class="btn btn-ghost" onclick="document.querySelector('[data-tab=examples]').click()">חזרה לדוגמאות</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function restartQuiz() {
+    currentQ = 0;
+    score = 0;
+    renderQuestion();
+  }
+  
+  window.restartQuiz = restartQuiz;
+
+  // ============ INIT ============
+  renderLearnDiagrams();
+  renderExamples();
+  questions = filterQuestions('all');
+  renderQuestion();
+</script>
+
+</body>
+</html>
